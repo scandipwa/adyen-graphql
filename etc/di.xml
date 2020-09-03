@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Koene
+ * @package   Koene_AdyenGraphQl
+ * @author    Ivans Zuks <info@scandiweb.com>
+ * @copyright Copyright (c) 2020 Scandiweb, Inc (https://scandiweb.com)
+ * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="ScandiPWA\QuoteGraphQl\Model\Resolver\PlaceOrder">
+        <plugin name="add_adyen_data" type="Koene\AdyenGraphQl\plugin\AfterPlaceOrderResolver" sortOrder="20"/>
+    </type>
+</config>

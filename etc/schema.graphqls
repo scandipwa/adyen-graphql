@@ -1,0 +1,80 @@
+type Query {
+    getAdyenPaymentMethods(guestCartId: String, shippingAddress: AddressInput): [PaymentMethod] @resolver(class: "Koene\\AdyenGraphQl\\Model\\Resolver\\AdyenPaymentMethods")
+    getAdyenConfig: AdyenConfig @resolver(class: "Koene\\AdyenGraphQl\\Model\\Resolver\\AdyenConfig")
+}
+
+type Mutation {
+    adyenThreeDS2Process(payload: String!, orderId: String!): OrderIdObject @resolver(class: "Koene\\AdyenGraphQl\\Model\\Resolver\\AdyenThreeDS2Process")
+    s_placeOrder(guestCartId: String): PlaceOrderOutput @resolver(class: "\\ScandiPWA\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder")
+}
+
+type AdyenConfig {
+    originKey: String,
+    mode: String,
+    locale: String
+}
+
+type PaymentMethodDetails {
+    key: String,
+    type: String,
+    value: String,
+    optional: Boolean
+}
+
+type PaymentMethodIcon {
+    url: String,
+    width: Int,
+    height: Int
+}
+
+type PaymentMethod {
+    brands: [String]
+    details: [PaymentMethodDetails],
+    name: String,
+    title: String,
+    type: String,
+    supportsRecurring: Boolean,
+    icon: PaymentMethodIcon,
+    isPaymentMethodOpenInvoiceMethod: Boolean
+}
+
+input PaymentMethodAdditionalData {
+    type: String,
+    cc_type: String,
+    number: String,
+    cvc: String,
+    expiryMonth: String,
+    expiryYear: String,
+    encryptedSecurityCode: String,
+    encryptedExpiryMonth: String,
+    encryptedExpiryYear: String,
+    encryptedCardNumber: String,
+    holderName: String,
+    store_cc: String,
+    java_enabled: Boolean,
+    screen_color_depth: Int,
+    screen_width: Int,
+    screen_height: Int,
+    timezone_offset: Int,
+    language: String
+}
+
+type PlaceOrderOutput {
+    order: Order!
+}
+
+type OrderIdObject {
+    id: Int,
+    threeDS2: Boolean,
+    type: String,
+    token: String
+}
+
+type Order {
+    id: String,
+    order_id: String,
+    threeDS2: Boolean,
+    redirectUrl: String,
+    type: String,
+    token: String
+}
