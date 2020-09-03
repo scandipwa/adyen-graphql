@@ -7,7 +7,7 @@
  */
 
 import { fetchQuery } from 'Util/Request';
-import { CREDIT_CARD_TYPE } from '../component/Adyen/Adyen.container';
+import { CREDIT_CARD_TYPE } from '../component/AdyenCard/AdyenCard.container';
 import { ADYEN_CC } from './CheckoutPayments.plugin';
 import AdyenQuery from '../query/Adyen.query';
 

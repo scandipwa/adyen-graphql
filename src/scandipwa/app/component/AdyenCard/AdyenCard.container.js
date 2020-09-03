@@ -9,14 +9,15 @@
 import { createRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Adyen from './Adyen.component';
+import AdyenCard from './AdyenCard.component';
 
 export const mapStateToProps = () => ({});
 export const mapDispatchToProps = () => ({});
 
 export const CREDIT_CARD_TYPE = 'scheme';
+export const IDEAL_TYPE = 'ideal';
 
-export class AdyenContainer extends ExtensiblePureComponent {
+export class AdyenCardContainer extends ExtensiblePureComponent {
     static propTypes = {
         config: PropTypes.shape({
             paymentMethods: PropTypes.object
@@ -98,18 +99,21 @@ export class AdyenContainer extends ExtensiblePureComponent {
 
     render() {
         return (
-            <Adyen
+            <AdyenCard
                 { ...this.props }
                 { ...this.state }
-                { ...{ checkout: this.checkout, fieldRef: this.fieldRef } }
+                { ...{
+                    checkout: this.checkout,
+                    fieldRef: this.fieldRef
+                } }
             />
         );
     }
 }
 
 export default connect(
-    middleware(mapStateToProps, 'Scandipwa/AdyenGraphQl/Component/Adyen/Container/mapStateToProps'),
-    middleware(mapDispatchToProps, 'Scandipwa/AdyenGraphQl/Component/Adyen/Container/mapDispatchToProps')
+    middleware(mapStateToProps, 'Scandipwa/AdyenGraphQl/Component/AdyenCard/Container/mapStateToProps'),
+    middleware(mapDispatchToProps, 'Scandipwa/AdyenGraphQl/Component/AdyenCard/Container/mapDispatchToProps')
 )(
-    middleware(AdyenContainer, 'Scandipwa/AdyenGraphQl/Component/Adyen/Container')
+    middleware(AdyenCardContainer, 'Scandipwa/AdyenGraphQl/Component/AdyenCard/Container')
 );
