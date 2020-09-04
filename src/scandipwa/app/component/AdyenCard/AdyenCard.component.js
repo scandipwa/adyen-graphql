@@ -24,4 +24,4 @@ export class AdyenCard extends ExtensiblePureComponent {
     }
 }
 
-export default middleware(AdyenCard, 'Scandipwa/AdyenGraphQl/Component/Adyen/Component');
+export default middleware(AdyenCard, 'Scandipwa/AdyenGraphQl/Component/AdyenCard/Component');

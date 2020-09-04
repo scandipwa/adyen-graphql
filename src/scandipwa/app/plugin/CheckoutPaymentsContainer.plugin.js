@@ -7,8 +7,9 @@
  */
 
 import { fetchQuery } from 'Util/Request';
+import AdyenAPI from '../util/Adyen/API';
 import { CREDIT_CARD_TYPE } from '../component/AdyenCard/AdyenCard.container';
-import { ADYEN_CC } from './CheckoutPayments.plugin';
+import { ADYEN_CC, ADYEN_HPP } from './CheckoutPayments.plugin';
 import AdyenQuery from '../query/Adyen.query';
 
 class CheckoutPaymentsContainerPlugin {
@@ -41,7 +42,8 @@ class CheckoutPaymentsContainerPlugin {
     aroundDataMap = (originalMember) => {
         return {
             ...originalMember,
-            [ADYEN_CC]: this.getAdyenData.bind(this)
+            [ADYEN_CC]: this.getAdyenData.bind(this),
+            [ADYEN_HPP]: this.getIdealData.bind(this)
         };
     };
 
@@ -55,8 +57,26 @@ class CheckoutPaymentsContainerPlugin {
                     [selectedPaymentCode]: data
                 }
             }));
+        },
+        setIdealState(data) {
+            instance.setState(() => ({ idealState: data }))
         }
     });
+
+    /**
+     * iDEAL payment method pipeline
+     * @param {object} instance
+     */
+    async getIdealData(instance) {
+        const { idealState } = instance.state;
+
+        window.idealState = idealState;
+        console.log({ idealState });
+
+        const paymentResponse = await AdyenAPI.makePayment(idealState);
+
+        console.log(paymentResponse);
+    }
 
     getAdyenData(instance) {
         const { paymentMethodData: { [ADYEN_CC]: asyncData = {} } } = instance.state;
@@ -75,6 +95,9 @@ class CheckoutPaymentsContainerPlugin {
         ];
 
         const { getAdyenConfig, getAdyenPaymentMethods } = await fetchQuery(queries);
+
+        const paymentMethodsResponse = await AdyenAPI.getPaymentMethods();
+
         const paymentMethod = getAdyenPaymentMethods.find(({ type }) => type === CREDIT_CARD_TYPE) || {};
 
         const {
@@ -90,6 +113,7 @@ class CheckoutPaymentsContainerPlugin {
             const { AdyenCheckout } = window;
 
             window.adyen = new AdyenCheckout({
+                paymentMethodsResponse,
                 locale,
                 environment,
                 originKey

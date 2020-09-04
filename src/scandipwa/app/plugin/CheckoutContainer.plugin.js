@@ -39,7 +39,8 @@ class CheckoutContainerPlugin {
             await fetchMutation(CheckoutQuery.getSetPaymentMethodOnCartMutation({
                 guest_cart_id,
                 payment_method: {
-                    code, [( code === ADYEN_CC ? 'additional_data' : code )]: additional_data
+                    code,
+                    [( code === ADYEN_CC ? 'additional_data' : code )]: additional_data
                 }
             }));
 

@@ -6,31 +6,39 @@
  * @license   http://opensource.org/licenses/OSL-3.0 The Open Software License 3.0 (OSL-3.0)
  */
 
-import Adyen from '../component/Adyen';
+import AdyenCard from '../component/AdyenCard';
+import AdyenIdeal from '../component/AdyenIdeal';
 import CheckoutPayment from "Component/CheckoutPayment/CheckoutPayment.component";
 
 export const ADYEN_CC = 'adyen_cc';
+export const ADYEN_HPP = 'adyen_hpp';
 
 class CheckoutPaymentsPlugin {
     aroundPaymentRenderMap = (originalMember) => {
         return {
             ...originalMember,
-            [ADYEN_CC]: this.renderAdyen.bind(this)
+            [ADYEN_CC]: this.renderAdyenCard.bind(this),
+            [ADYEN_HPP]: this.renderAdyenIdeal.bind(this)
         }
     }
 
-    renderAdyen(props) {
+    renderAdyenCard(props) {
         const {
             paymentMethodConfig: config = {},
             setPaymentMethodData
         } = props;
 
         return (
-            <Adyen
+            <AdyenCard
                 config={ config }
                 setPaymentMethodData={ setPaymentMethodData }
             />
         );
+    }
+
+    renderAdyenIdeal(props) {
+        const { setIdealState } = props;
+        return <AdyenIdeal { ...props } setIdealState={ setIdealState } />
     }
 
     aroundRenderSelectedPayment = (args, callback = () => {}, instance) => {
@@ -55,7 +63,7 @@ class CheckoutPaymentsPlugin {
         const { code } = method;
         const isSelected = selectedPaymentCode === code;
 
-        if (code === ADYEN_CC && !isAdyenLoaded) {
+        if ((code === ADYEN_CC || code === ADYEN_HPP) && !isAdyenLoaded) {
             return;
         }
 

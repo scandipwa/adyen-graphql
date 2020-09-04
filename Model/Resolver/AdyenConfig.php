@@ -36,15 +36,21 @@ class AdyenConfig implements ResolverInterface
 
     /** @var Config */
     protected $config;
+    /**
+     * @var Config
+     */
+    protected $adyenHelper;
 
     /**
      * @param AdyenOriginKey $adyenOriginKey
+     * @param Config $adyenHelper
      * @param StoreManagerInterface $storeManager
      * @param Resolver $resolver
      * @param Config $config
      */
     public function __construct(
         AdyenOriginKey $adyenOriginKey,
+        \Adyen\Payment\Helper\Data $adyenHelper,
         StoreManagerInterface $storeManager,
         Resolver $resolver,
         Config $config
@@ -53,6 +59,7 @@ class AdyenConfig implements ResolverInterface
         $this->storeManager = $storeManager;
         $this->resolver = $resolver;
         $this->config = $config;
+        $this->adyenHelper = $adyenHelper;
     }
 
     /**
@@ -75,6 +82,7 @@ class AdyenConfig implements ResolverInterface
         $storeId = $this->storeManager->getStore()->getId();
         $isDemo = $this->config->isDemoMode($storeId);
 
+//        var_dump($this->adyenHelper->getAPIKey());
         return [
             'originKey' => $this->adyenOriginKey->getOriginKey(),
             'mode' => $isDemo ? $this->config::TEST : $this->config::LIVE,

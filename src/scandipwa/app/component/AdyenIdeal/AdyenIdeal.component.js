@@ -9,12 +9,19 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import AdyenCard from '../AdyenCard';
 
-export class Adyen extends ExtensiblePureComponent {
+export class AdyenIdeal extends ExtensiblePureComponent {
+    static propTypes = {
+        fieldRef: PropTypes.shape({
+            current: PropTypes.instanceOf(Element)
+        }).isRequired
+    };
+
     render() {
-        return <AdyenCard { ...this.props } />;
+        const { fieldRef } = this.props;
+
+        return <div ref={ fieldRef } />;
     }
 }
 
-export default middleware(Adyen, 'Scandipwa/AdyenGraphQl/Component/Adyen/Component');
+export default middleware(AdyenIdeal, 'Scandipwa/AdyenGraphQl/Component/AdyenIdeal/Component');

@@ -15,7 +15,6 @@ export const mapStateToProps = () => ({});
 export const mapDispatchToProps = () => ({});
 
 export const CREDIT_CARD_TYPE = 'scheme';
-export const IDEAL_TYPE = 'ideal';
 
 export class AdyenCardContainer extends ExtensiblePureComponent {
     static propTypes = {

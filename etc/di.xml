@@ -12,4 +12,9 @@
     <type name="ScandiPWA\QuoteGraphQl\Model\Resolver\PlaceOrder">
         <plugin name="add_adyen_data" type="Koene\AdyenGraphQl\plugin\AfterPlaceOrderResolver" sortOrder="20"/>
     </type>
+
+    <preference for="Koene\AdyenGraphQl\Api\AdyenPaymentMethodManagementInterface"
+                type="Koene\AdyenGraphQl\Model\AdyenPaymentMethodManagement"/>
+    <preference for="Koene\AdyenGraphQl\Api\AdyenPaymentManagementInterface"
+                type="Koene\AdyenGraphQl\Model\AdyenPaymentManagement"/>
 </config>
