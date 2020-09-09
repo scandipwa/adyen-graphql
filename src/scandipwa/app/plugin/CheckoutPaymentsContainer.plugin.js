@@ -69,13 +69,10 @@ class CheckoutPaymentsContainerPlugin {
      */
     async getIdealData(instance) {
         const { idealState } = instance.state;
+        const { adyen } = window;
 
-        window.idealState = idealState;
-        console.log({ idealState });
-
-        const paymentResponse = await AdyenAPI.makePayment(idealState);
-
-        console.log(paymentResponse);
+        const action = await AdyenAPI.makePayment(idealState);
+        adyen.createFromAction(action).mount('#AdyenRedirect');
     }
 
     getAdyenData(instance) {
