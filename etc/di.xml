@@ -17,4 +17,13 @@
                 type="Koene\AdyenGraphQl\Model\AdyenPaymentMethodManagement"/>
     <preference for="Koene\AdyenGraphQl\Api\AdyenPaymentManagementInterface"
                 type="Koene\AdyenGraphQl\Model\AdyenPaymentManagement"/>
+
+    <virtualType name="ScandiPWA\Router\Controller\ConfigurableRouter">
+        <arguments>
+            <argument name="ignoredURLs" xsi:type="array">
+                <item name="adyenscandipwa" xsi:type="string">^/adyenscandipwa/.*</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
 </config>
