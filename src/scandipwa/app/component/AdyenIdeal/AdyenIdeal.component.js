@@ -20,7 +20,12 @@ export class AdyenIdeal extends ExtensiblePureComponent {
     render() {
         const { fieldRef } = this.props;
 
-        return <div ref={ fieldRef } />;
+        return (
+        <>
+            <div ref={ fieldRef } />
+            <div id='AdyenRedirect' />
+        </>
+        );
     }
 }
 
