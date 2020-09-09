@@ -9,28 +9,29 @@ use Adyen\Client;
 use Adyen\Environment;
 use Adyen\Payment\Helper\Data;
 use Adyen\Service\Checkout;
+use Koene\AdyenGraphQl\Api\AdyenPaymentManagementInterface;
 use Koene\AdyenGraphQl\Model\DataSource\AdyenAPIHelper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 
-class AdyenPaymentManagement implements \Koene\AdyenGraphQl\Api\AdyenPaymentManagementInterface
+class AdyenPaymentManagement implements AdyenPaymentManagementInterface
 {
     /**
      * @var AdyenAPIHelper
      */
-    private $APIHelper;
+    protected $APIHelper;
 
     /**
      * @var AdyenPaymentMethodManagement
      */
-    private $adyenPaymentMethodManagement;
+    protected $adyenPaymentMethodManagement;
 
     /**
      * @var Data
      */
-    private $adyenHelper;
+    protected $adyenHelper;
 
     /**
      * @var StoreManagerInterface
@@ -82,6 +83,7 @@ class AdyenPaymentManagement implements \Koene\AdyenGraphQl\Api\AdyenPaymentMana
         $service = new Checkout($adyenClient);
 
         $currencyCode = $quote->getCurrency()->getQuoteCurrencyCode();
+
         $params = [
             'amount' => [
                 'currency' => $currencyCode,
@@ -89,15 +91,24 @@ class AdyenPaymentManagement implements \Koene\AdyenGraphQl\Api\AdyenPaymentMana
                     $quote->getGrandTotal(),
                     $currencyCode
                 ),
-                'reference' => $quote->getReservedOrderId(),
-                'paymentMethod' => $idealStateData['paymentMethod'],
-                'returnUrl' => $store->getBaseUrl(),
-                'merchantAccount' => $this->adyenHelper->getAdyenAbstractConfigData('merchant_account', $store->getId())
-            ]
+            ],
+            'reference' => $quote->getReservedOrderId(),
+            'paymentMethod' => $idealStateData['paymentMethod'],
+            'returnUrl' => join('/', [
+                trim($store->getBaseUrl(), '/'),
+                'adyenscandipwa/redirect/bank'
+            ]),
+            'merchantAccount' => $this->adyenHelper->getAdyenAbstractConfigData('merchant_account', $store->getId())
         ];
 
-        return $service->payments($params);
+        $result = $service->payments($params);
 
-        // TODO save action.paymentData
+        // Persist data for the Bank controller
+        $_SESSION['adyen_storage'] = [
+            'action' => $result['action']['paymentData'],
+            'quoteId' => $quote->getId()
+        ];
+
+        return json_encode($result['action']);
     }
 }
