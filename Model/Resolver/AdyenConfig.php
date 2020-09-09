@@ -82,7 +82,6 @@ class AdyenConfig implements ResolverInterface
         $storeId = $this->storeManager->getStore()->getId();
         $isDemo = $this->config->isDemoMode($storeId);
 
-//        var_dump($this->adyenHelper->getAPIKey());
         return [
             'originKey' => $this->adyenOriginKey->getOriginKey(),
             'mode' => $isDemo ? $this->config::TEST : $this->config::LIVE,
